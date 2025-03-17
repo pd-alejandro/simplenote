@@ -1,0 +1,901 @@
+/* Header */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    height: var(--header-height);
+    width: 100%;
+    line-height: 1;
+}
+
+.logo__container {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.name {
+    color: var(--title-color);
+    font-family: sans-serif;
+    font-weight: normal;
+    margin: 0;
+    font-size: 1.75rem;
+}
+
+.name>span {
+    font-weight: bolder;
+}
+
+/* Menu btn */
+.menu-btn {
+    position: fixed;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 3rem;
+    height: 3rem;
+    padding: 0.5rem;
+    aspect-ratio: 1/1;
+    background-color: var(--controls-btn);
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color var(--quick-transition) ease;
+    z-index: 1000;
+
+    &:hover {
+        background-color: var(--controls-btn--hover);
+    }
+
+    &:active {
+        background-color: var(--controls-btn--active);
+    }
+}
+
+/* Nav */
+nav {
+    position: fixed;
+    top: 0.25rem;
+    right: 0.25rem;
+    width: calc(280px - 0.5rem);
+    max-height: calc(280px - 1.5rem);
+    padding: 1rem;
+    background-color: var(--nav-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 2rem;
+    opacity: 0;
+    z-index: 900;
+    overflow: hidden;
+    transform-origin: top right;
+    animation-duration: var(--quick-transition);
+    animation-fill-mode: forwards;
+
+    &.menu--closed {
+        animation-name: hideMenu;
+
+        & input {
+            visibility: hidden;
+        }
+    }
+
+    &.menu--opened {
+        animation-name: showMenu;
+    }
+
+}
+
+nav>ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    overflow-y: auto;
+}
+
+nav .menu-item {
+    padding: 0.5rem 0.5rem 1rem;
+
+    &:not(:last-child) {
+        border-bottom: 1px solid var(--border-color);
+    }
+}
+
+.menu-item__name {
+    font-size: 1.25rem;
+    font-weight: bolder;
+    margin-bottom: 0.5rem;
+}
+
+/* Custom radio buttons */
+.custom-radio {
+    width: 2.25rem;
+    height: 2.25rem;
+    margin: 0.25rem;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+
+label:has(.custom-radio) {
+    cursor: pointer;
+}
+
+input[type='radio']+.custom-radio>.custom-radio__check {
+    opacity: 0;
+}
+
+input[type='radio']:checked+.custom-radio>.custom-radio__check {
+    opacity: 1;
+}
+
+[id^='radio--'] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+
+    &:focus+.custom-radio {
+        outline: 3px solid var(--outline-color);
+        outline-offset: 2px;
+    }
+}
+
+/* Theme */
+#theme-sets label:has(input:checked) {
+    outline: 2px solid var(--primary);
+}
+
+#theme-sets label {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.5rem;
+    text-transform: capitalize;
+    font-weight: bold;
+    color: var(--font-color);
+    background-color: var(--item-bg);
+    border-radius: 1rem;
+
+    &:is([for='radio--light']) {
+        color-scheme: light;
+        margin-right: 0.5rem;
+    }
+
+    &:is([for='radio--dark']) {
+        color-scheme: dark;
+    }
+
+    &>span {
+        text-indent: 0.25rem;
+    }
+}
+
+#theme-sets .custom-radio {
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: var(--checkmark-bg);
+}
+
+#theme-sets input:checked+.custom-radio {
+    background-color: var(--primary);
+}
+
+/* Backdrop */
+.backdrop {
+    position: fixed;
+    inset: 0;
+    width: 0;
+    height: 0;
+    backdrop-filter: blur(4px) brightness(0.3);
+    z-index: 850;
+}
+
+.menu--opened+.backdrop {
+    width: 100%;
+    height: 100%;
+}
+
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    backdrop-filter: blur(4px) brightness(0.3);
+    z-index: 750;
+    width: 100%;
+    height: 100%;
+}
+
+/* Main */
+main {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--header-height);
+}
+
+/* NOTES */
+.no-notes {
+    font-weight: bolder;
+    color: var(--item-color--checked);
+}
+
+.note-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(280px - 2rem), 36ch));
+    gap: 1rem;
+    justify-content: center;
+    justify-items: center;
+    width: 100%;
+    max-width: 120ch;
+    padding: 0 1rem 4rem;
+    margin: 0 auto 0;
+}
+
+.note-list__note {
+    position: relative;
+    min-width: calc(280px - 2rem);
+    width: 100%;
+    max-width: calc(40ch - 1rem);
+    min-height: 5.25rem;
+    padding: 1rem 1.5rem;
+    background-color: var(--content-bg);
+    border-radius: 2rem;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    opacity: 0;
+    cursor: pointer;
+    animation: noteAppear 0.3s ease-out forwards;
+    transition: border 02s ease;
+
+    &:hover {
+        .note_delete-btn {
+            opacity: 1;
+        }
+
+        box-shadow: 0px 0px 2px var(--primary);
+    }
+}
+
+.note__options {
+    padding: 0;
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.note_header {
+    margin: 0.5rem 0;
+}
+
+.note_title {
+    margin: 0;
+    font-size: 1.25rem;
+    text-wrap: nowrap;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: normal;
+}
+
+.note_text {
+    max-height: 4.75rem;
+    line-height: 1.25rem;
+    font-size: 1.1rem;
+    margin: 0.5rem 0;
+    text-wrap: wrap;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow: hidden;
+}
+
+.note_tasks {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0;
+
+    &>.note_task {
+        position: relative;
+        padding: 0 0 0 1.5rem;
+        font-size: 1.1rem;
+        line-height: 1.5rem;
+        text-wrap: nowrap;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0.25rem;
+            display: block;
+            width: 0.75rem;
+            height: 0.75rem;
+            background-color: var(--checkmark-bg);
+            border-radius: 50%;
+            transform: translateY(-50%);
+        }
+    }
+}
+
+.note_task.note_task--completed {
+    color: var(--item-color--checked);
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+
+    &::before {
+        /* content: '✔';
+        font-size: 0.75rem;
+        text-align: center;
+        line-height: 0.75rem;
+        color: var(--lighter); */
+        background-color: var(--checkmark--checked);
+    }
+}
+
+.note_delete-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+    opacity: 0;
+}
+
+/* Add note btn */
+.note-list__add-note {
+    position: fixed;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    width: 3rem;
+    height: 3rem;
+    padding: 0.5rem;
+    display: block;
+    background: var(--gradient);
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: transform var(--quick-transition) linear, color var(--quick-transition) linear, box-shadow var(--quick-transition) linear, transform var(--quick-transition) linear;
+    z-index: 550;
+
+    &:hover {
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+        color: var(--main-btn-color--active);
+        transform: translateY(-0.25rem);
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.note-list__menu {
+    position: fixed;
+    right: 0.5rem;
+    bottom: 3.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    background-color: var(--content-bg);
+    border-radius: 1rem;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    z-index: 500;
+    pointer-events: none;
+
+    &:not(.open) button {
+        visibility: hidden;
+    }
+
+    &.open {
+        pointer-events: auto;
+        animation: showNotesMenu 0.3s ease-out forwards;
+    }
+
+    &>button {
+        --percent: 10%;
+        display: flex;
+        justify-content: flex-end;
+        align-content: center;
+        color: var(--font-color);
+        gap: 0.5rem;
+        padding: 0.5rem 0.5rem 0.5rem 1rem;
+        font-size: 1.25rem;
+        line-height: 2rem;
+        text-align: end;
+        background-color: color-mix(in srgb, var(--button-bg) var(--percent), transparent 100%);
+        border: none;
+        border-radius: 1rem;
+        cursor: pointer;
+
+        &:hover {
+            --percent: 15%;
+        }
+
+        &:active {
+            --percent: 25%;
+        }
+    }
+}
+
+@keyframes showNotesMenu {
+    from {
+        opacity: 0;
+        transform: translateY(1rem);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* MODAL */
+.modal,
+.modal {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    inset: var(--header-height) 50% 50% auto;
+    width: clamp(calc(280px - 1rem), calc(100% - 1rem), 50ch);
+    height: min-content;
+    max-height: calc(100vh - var(--header-height) - 1rem);
+    overflow-y: auto;
+    background-color: var(--content-bg);
+    border-radius: 2rem;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 800;
+
+    &:not(.modal--open) :is(input, button, .note-modal__text) {
+        visibility: hidden;
+    }
+}
+
+.modal--open {
+    pointer-events: auto;
+    animation: showModal 0.2s cubic-bezier(0, 0.6, 0.8, 1) forwards;
+}
+
+.modal--closing {
+    pointer-events: none;
+    animation: hideModal 0.2s cubic-bezier(0, 0.6, 0.8, 1) forwards;
+}
+
+.modal-header {
+    /* align-items: center; */
+    padding: 1rem 1.5rem 0.5rem;
+    margin-bottom: 0.5rem;
+    background-color: var(--item-bg);
+}
+
+.note-modal__close-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    /* background-color: var(--primary-dark); */
+    background: transparent;
+    border: none;
+    border-radius: 1.25rem;
+    cursor: pointer;
+}
+
+.note-modal__title {
+    width: calc(100% - 2rem);
+    margin: 0;
+    font-size: 1.4rem;
+    line-height: 2.5rem;
+    text-indent: 1ch;
+    background-color: transparent;
+    border: none;
+    border-radius: 1.25rem;
+
+    &::placeholder {
+        color: var(--item-color--checked);
+    }
+}
+
+.modal-header .wrapper {
+    margin-top: 0.5rem;
+    justify-content: end;
+
+    &:has(small.date) {
+        justify-content: space-between;
+    }
+}
+
+small.date>span {
+    font-weight: bolder;
+}
+
+.note-modal__text {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    margin: 0.5rem 1rem 1rem;
+    min-height: 6rem;
+    font-size: 1.25rem;
+    line-height: 1.375;
+    background-color: var(--item-bg);
+    border: none;
+    border-radius: 1rem;
+    overflow-y: auto;
+
+    &:empty::before {
+        content: 'Add a note...';
+        color: var(--item-color--checked);
+        pointer-events: none;
+        display: block;
+    }
+}
+
+/* TASKS */
+.task-list {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    margin: 0;
+    list-style: none;
+    overflow-y: auto;
+}
+
+/* Add task btn */
+.task-list__add-button {
+    width: calc(100% - 2rem);
+    height: 4rem;
+    padding: 1.4375rem;
+    margin: 0 1rem 1rem;
+    font-size: 1.125rem;
+    font-weight: bolder;
+    text-transform: capitalize;
+    line-height: 1;
+    color: var(--main-btn-color);
+    background: var(--gradient);
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: transform var(--quick-transition) linear, color var(--quick-transition) linear, box-shadow var(--quick-transition) linear, transform var(--quick-transition) linear;
+
+    &::before {
+        content: '+';
+        margin-right: 0.5rem;
+    }
+
+    &:hover {
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+        color: var(--main-btn-color--active);
+        transform: translateY(-0.25rem);
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* Task component */
+.task-item {
+    contain: paint;
+    display: flex;
+    min-height: 0rem;
+    background-color: var(--item-bg);
+    border-radius: 1.5rem;
+
+    &.new-task {
+        animation: taskAppear var(--medium-transition) ease-out forwards;
+    }
+
+    &.task-item--ready {
+        min-height: 3rem;
+        margin-bottom: 0.75rem;
+    }
+}
+
+/* Task Checkbox Component */
+.checkmark {
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: 0.75rem;
+    background-color: var(--checkmark-bg);
+    border-radius: 50%;
+    cursor: pointer;
+
+    &>svg {
+        opacity: 0;
+    }
+}
+
+.checkbox--hidden:focus {
+    outline: none;
+}
+
+.checkbox--hidden:focus+.checkmark {
+    outline: 3px solid var(--outline-color);
+    outline-offset: 2px;
+}
+
+/* hide checkbox */
+.checkbox--hidden {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Task Content Component */
+.task-item__text {
+    flex: 1;
+    padding: 0.640625rem 0;
+    font-size: 1.25rem;
+    line-height: 1.375;
+    overflow-y: auto;
+    text-wrap: wrap;
+    white-space: wrap;
+    word-break: break-all;
+    overflow-x: hidden;
+
+    &:focus {
+        outline: none;
+        box-shadow: inset 0 -3px 0 var(--outline-color);
+    }
+}
+
+.task-item:focus-within {
+    outline: 2px solid var(--border-color);
+}
+
+/* Task Remove Component */
+.task-item__remove-button {
+    --percent: 0%;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    margin: 0.5rem;
+    background-color: color-mix(in srgb, var(--button-bg) var(--percent), transparent 100%);
+    border: none;
+    border-radius: 50%;
+    contain: paint;
+    cursor: pointer;
+    opacity: 0;
+    will-change: opacity, background-color;
+    transition: background-color var(--quick-transition) linear;
+
+    &:hover {
+        --percent: 15%;
+    }
+
+    &:active {
+        --percent: 25%;
+    }
+}
+
+.task-item:is(:hover, :focus-within) .task-item__remove-button,
+.task-item__remove-button:focus {
+    opacity: 1;
+}
+
+/* -- task is done */
+.task-item:has(.checkbox--hidden:checked)>.task-item__text {
+    color: var(--item-color--checked);
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+}
+
+.checkbox--hidden:checked+.checkmark {
+    background-color: var(--checkmark--checked);
+
+    &>svg {
+        opacity: 1;
+    }
+}
+
+/* -- task is being removed */
+.removing-task {
+    animation: taskDisappear var(--medium-transition) ease-in forwards;
+}
+
+.removing-task .task-item__text {
+    overflow: hidden;
+}
+
+/* ===== Icons ===== */
+[class*='icon'] {
+    width: 100%;
+    height: 100%;
+}
+
+svg.check-icon {
+    &>path {
+        stroke: var(--check-icon);
+        stroke-width: 50;
+        fill: transparent;
+    }
+}
+
+svg.cross-icon,
+svg.note_delete-icon,
+svg.note_close-icon {
+    &>path {
+        stroke: var(--font-color);
+        stroke-width: 50;
+    }
+}
+
+svg.note-list__add-icon {
+    &>path {
+        stroke: var(--lighter);
+        stroke-width: 60;
+    }
+}
+
+svg.menu-icon {
+    &>path {
+        stroke: none;
+        stroke-width: 0;
+        fill: var(--menu-icon);
+    }
+}
+
+svg:is(.list__icon, .note__icon) {
+    width: 2rem;
+    height: 2rem;
+
+    &>path {
+        stroke: none;
+        stroke-width: 0;
+        fill: currentColor;
+    }
+}
+
+/* ===== Animations ===== */
+
+/* --height is set through react */
+@keyframes taskDisappear {
+    from {
+        max-height: var(--height);
+        min-height: 3rem;
+        margin-bottom: 0.5rem;
+        opacity: 1;
+    }
+
+    to {
+        max-height: 0rem;
+        min-height: 0rem;
+        margin-bottom: 0rem;
+        opacity: 0;
+    }
+}
+
+@keyframes taskAppear {
+    from {
+        min-height: 0rem;
+        margin-bottom: 0rem;
+        opacity: 0;
+    }
+
+    to {
+        min-height: 3rem;
+        margin-bottom: 0.5rem;
+        opacity: 1;
+    }
+}
+
+@keyframes contentApparition {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes showMenu {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes hideMenu {
+    50% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(0);
+        opacity: 0;
+    }
+}
+
+@keyframes showModal {
+    from {
+        opacity: 0;
+        transform: translateY(-1rem) translateX(50%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) translateX(50%);
+    }
+}
+
+@keyframes hideModal {
+    from {
+        opacity: 1;
+        transform: translateY(0) translateX(50%);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-1rem) translateX(50%);
+    }
+}
+
+@keyframes noteAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ===== Media ===== */
+@media (hover: none),
+(pointer: coarse) {
+
+    .menu-btn {
+        &:hover {
+            background-color: var(--controls-btn);
+        }
+
+        &:active {
+            background-color: var(--controls-btn--active);
+        }
+    }
+
+    .task-list__add-button {
+        &:hover {
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        &:active {
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    .task-item__remove-button {
+        --percent: 10%;
+        opacity: 1;
+
+        &:hover {
+            --percent: 10%;
+        }
+
+        &:active {
+            --percent: 25%;
+        }
+    }
+
+    .btn-tertiary {
+        &:hover {
+            transform: none
+        }
+
+        &:active {
+            transform: scale(1.02);
+        }
+    }
+}

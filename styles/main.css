@@ -1,0 +1,184 @@
+/* ===== Variables ===== */
+:root {
+    /* COLORS */
+    /* --color-base: 10; */
+    /* --color-lightness: 35; */
+    /* main */
+    --primary-light: lch(calc(var(--color-lightness) + 7) 100% var(--color-base));
+    --primary: lch(var(--color-lightness) 100% var(--color-base));
+    --primary-dark: lch(calc(var(--color-lightness) - 7) 100% var(--color-base));
+    /* light */
+    --lighter: lch(98% 2% var(--color-base));
+    --light: lch(95% 2% var(--color-base));
+    --mid-light: lch(93% 2% var(--color-base));
+    /* grey */
+    --grey-light: lch(82% 4% var(--color-base));
+    --grey-mid-light: lch(60% 4% var(--color-base));
+    --grey-mid-dark: lch(46% 4% var(--color-base));
+    --grey-dark: lch(30% 4% var(--color-base));
+    /* dark */
+    --mid-dark: lch(12% 2% var(--color-base));
+    --dark: lch(9% 2% var(--color-base));
+    --darker: lch(6% 2% var(--color-base));
+    /* others */
+    --gradient-color: lch(calc(var(--color-lightness) - 10) 100% calc(var(--color-base) + 10));
+
+    /* THEME */
+    /* gradients */
+    --gradient: linear-gradient(to right, var(--primary), var(--gradient-color));
+    /* backgrounds */
+    --body-bg: light-dark(var(--mid-light), var(--darker));
+    --nav-bg: light-dark(var(--lighter), var(--mid-dark));
+    --content-bg: light-dark(var(--lighter), var(--dark));
+    /* controls */
+    --controls-btn: var(--primary);
+    --controls-btn--hover: var(--primary-dark);
+    --controls-btn--active: var(--primary-light);
+    /* task */
+    --item-bg: light-dark(var(--light), var(--mid-dark));
+    --label-bg: light-dark(var(--light), var(--mid-dark));
+    --checkmark-bg: light-dark(var(--grey-light), var(--grey-dark));
+    --checkmark--checked: var(--primary);
+    /* remove task btn */
+    --button-bg: light-dark(var(--grey-dark), var(--grey-light));
+    /* fonts */
+    --title-color: var(--grey-mid-dark);
+    --font-color: light-dark(var(--grey-dark), var(--grey-light));
+    /* task */
+    --item-color--checked: light-dark(var(--grey-mid-dark), var(--grey-mid-light));
+    /* add task btn */
+    --main-btn-color: var(--light);
+    --main-btn-color--active: var(--lighter);
+    /* others */
+    --outline-color: var(--primary-light);
+    --border-color: light-dark(var(--grey-light), var(--grey-dark));
+    /* icons */
+    --check-icon: var(--lighter);
+    --cross-icon: light-dark(var(--grey-mid-dark), var(--grey-mid-light));
+    --menu-icon: var(--lighter);
+
+    /* TRANSITIONS */
+    --quick-transition: 150ms;
+    --medium-transition: 0.3s;
+    --slow-transition: 2s;
+
+    /* LAYOUT */
+    --header-height: 4rem;
+
+    color-scheme: light dark;
+}
+
+/* ===== Global ===== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+    outline: 3px solid var(--outline-color);
+    outline-offset: 2px;
+}
+
+::selection {
+    background-color: var(--primary);
+    color: var(--lighter);
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    min-width: 280px;
+    margin: 0;
+    font-family: sans-serif;
+    color: var(--font-color);
+    background-color: var(--body-bg);
+}
+
+body.light {
+    color-scheme: light;
+}
+
+body.dark {
+    color-scheme: dark;
+}
+
+/* Base */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    /* justify-content: space-evenly; */
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.gap-025 {
+    gap: 0.25rem;
+}
+
+.btn-primary {
+    contain: content;
+    position: relative;/
+}
+
+.btn-tertiary {
+    padding: 0.25rem 0.5rem;
+    border: none;
+    border-radius: 0.75rem;
+    background-color: var(--primary);
+    font-weight: bolder;
+    color: var(--light);
+    &:is(:hover, :active) {
+        transform: scale(1.02);
+    }
+}
+
+.ripple {
+    position: absolute;
+    top: var(--btn-y);
+    left: var(--btn-x);
+    display: block;
+    width: 100px;
+    aspect-ratio: 1/1;
+    background: radial-gradient(at center center,
+            transparent,
+            var(--light),
+            transparent 80%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    pointer-events: none;
+    animation: ripple var(--slow-transition);
+}
+
+/* ===== Keyframes ===== */
+@keyframes ripple {
+    from {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(100);
+    }
+}

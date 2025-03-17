@@ -44,18 +44,6 @@ const MainLayout = (props) => {
         setListModalOpen(true)
     }, [])
 
-    const closeNoteModal = useCallback((updatedNote) => {
-        setTextModalOpen(false)
-        setTimeout(() => {
-            setTextModalNote(null)
-        }, 200)
-        if (updatedNote) {
-            const hasContent = updatedNote.text?.length > 0
-            if (updatedNote.title.length === 0 && !hasContent) return handleDeleteNote(updatedNote.id)
-            handlePutNote(updatedNote)
-        }
-    }, [handleDeleteNote, handlePutNote])
-
     const createTextNote = useCallback(() => {
         const newTextNote = {
             id: nanoid(),
@@ -67,18 +55,6 @@ const MainLayout = (props) => {
         setTextModalOpen(true)
         setCreationMenuOpen(false)
     }, [])
-
-    const closeTaskModal = useCallback((updatedNote) => {
-        setListModalOpen(false)
-        setTimeout(() => {
-            setListModalNote(null)
-        }, 200)
-        if (updatedNote) {
-            const hasContent = updatedNote.tasks?.some(task => task.text.length > 0)
-            if (updatedNote.title.length === 0 && !hasContent) return handleDeleteNote(updatedNote.id)
-            handlePutNote(updatedNote)
-        }
-    }, [handlePutNote, handleDeleteNote])
 
     const createTaskNote = useCallback(() => {
         const newTaskNote = {
@@ -97,6 +73,32 @@ const MainLayout = (props) => {
         setListModalOpen(true)
         setCreationMenuOpen(false)
     }, [])
+
+    const closeNoteModal = useCallback((updatedNote) => {
+        setTextModalOpen(false)
+        setTimeout(() => {
+            setTextModalNote(null)
+        }, 200)
+        if (updatedNote) {
+            const hasContent = updatedNote.text?.length > 0
+            if (updatedNote.title.length === 0 && !hasContent) return handleDeleteNote(updatedNote.id)
+            handlePutNote(updatedNote)
+        }
+        window.scrollTo({ top: 0, brehavior: 'smooth' })
+    }, [handleDeleteNote, handlePutNote])
+
+    const closeTaskModal = useCallback((updatedNote) => {
+        setListModalOpen(false)
+        setTimeout(() => {
+            setListModalNote(null)
+        }, 200)
+        if (updatedNote) {
+            const hasContent = updatedNote.tasks?.some(task => task.text.length > 0)
+            if (updatedNote.title.length === 0 && !hasContent) return handleDeleteNote(updatedNote.id)
+            handlePutNote(updatedNote)
+        }
+        window.scrollTo({ top: 0, brehavior: 'smooth' })
+    }, [handlePutNote, handleDeleteNote])
 
     const deleteNote = useCallback((e = null, noteId) => {
         e?.stopPropagation()
@@ -134,16 +136,16 @@ const MainLayout = (props) => {
     }, [openNoteModal, openTaskModal])
 
     const getPlainText = (text, lines = 3) => {
-            const tempElement = document.createElement("div")
-            tempElement.innerHTML = text.replace(/<br\s*[/]?>/gi, '\n').replace(/<div\b[^>]*>/gi, '').replace(/<\/div>/gi, '\n')
-            const tempArray = tempElement.innerText.split('\n')
-            if (tempArray.length > 1 && lines === 1) return tempArray.splice(0, lines)+'...'
-            return tempArray.splice(0, lines).join('\n')
+        const tempElement = document.createElement("div")
+        tempElement.innerHTML = text.replace(/<br\s*[/]?>/gi, '\n').replace(/<div\b[^>]*>/gi, '').replace(/<\/div>/gi, '\n')
+        const tempArray = tempElement.innerText.split('\n')
+        if (tempArray.length > 1 && lines === 1) return tempArray.splice(0, lines) + '...'
+        return tempArray.splice(0, lines).join('\n')
     }
 
     return (
         <>
-            <main inert={props.navOpen ||listModalOpen || textModalOpen ? true : undefined}>
+            <main inert={props.navOpen || listModalOpen || textModalOpen ? true : undefined}>
                 {notes.length > 0 ? (
                     <div className='note-list'>
                         {notes.map(note => (
@@ -190,7 +192,7 @@ const MainLayout = (props) => {
                 onClick={toggleCreationMenu}
                 aria-expanded={creationMenuOpen}
                 aria-controls="create-note-menu"
-                inert={props.navOpen ||listModalOpen || textModalOpen ? true : undefined}>
+                inert={props.navOpen || listModalOpen || textModalOpen ? true : undefined}>
                 <svg xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 512 512"
                     className='note-list__add-icon'>

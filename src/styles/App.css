@@ -282,7 +282,7 @@ main {
 
 .note_text {
     max-height: 4.75rem;
-    line-height: 1.25rem;
+    line-height: 1.5rem;
     font-size: 1.1rem;
     margin: 0.5rem 0;
     text-wrap: wrap;
@@ -300,7 +300,7 @@ main {
         position: relative;
         padding: 0 0 0 1.5rem;
         font-size: 1.1rem;
-        line-height: 1.5rem;
+        line-height: 1.75rem;
         text-wrap: nowrap;
         white-space: nowrap;
         overflow: hidden;
@@ -481,6 +481,7 @@ main {
 .note-modal__close-btn {
     width: 2.5rem;
     height: 2.5rem;
+    padding: 0;
     /* background-color: var(--primary-dark); */
     background: transparent;
     border: none;
@@ -506,13 +507,20 @@ main {
 .modal-header .wrapper {
     margin-top: 0.5rem;
     justify-content: end;
+    align-content: center;
 
     &:has(small.date) {
         justify-content: space-between;
     }
 }
 
+small.date {
+    display: inline-flex;
+    align-items: center;
+}
+
 small.date>span {
+    margin-right: 0.25rem;
     font-weight: bolder;
 }
 
@@ -722,7 +730,7 @@ svg.note_delete-icon,
 svg.note_close-icon {
     &>path {
         stroke: var(--font-color);
-        stroke-width: 50;
+        stroke-width: 40;
     }
 }
 

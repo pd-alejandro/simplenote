@@ -287,7 +287,8 @@ main {
     margin: 0.5rem 0;
     text-wrap: wrap;
     white-space: pre-wrap;
-    word-break: break-word;
+    word-break: normal;
+    overflow-wrap: break-word;
     overflow: hidden;
 }
 
@@ -905,5 +906,13 @@ svg:is(.list__icon, .note__icon) {
         &:active {
             transform: scale(1.02);
         }
+    }
+}
+
+@media (orientation: landscape) and (pointer: coarse) {
+    .modal {
+        inset: 1rem 50% 1rem auto;
+        width: calc(100vw - 8rem);
+        max-height: calc(100vh - 2rem);
     }
 }
